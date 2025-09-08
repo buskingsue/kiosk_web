@@ -24,7 +24,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .   # index.html, kiosk.css, kiosk.js가 있는 위치
+          path: ./   # index.html, kiosk.css, kiosk.js가 있는 위치
 
       - name: Deploy to GitHub Pages
         id: deployment
