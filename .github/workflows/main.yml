@@ -3,7 +3,7 @@ name: Deploy static site to GitHub Pages
 on:
   push:
     branches:
-      - main   # main 브랜치에 push 할 때 자동 실행
+      - main   # main 브랜치에 push 시 실행
 
 permissions:
   contents: read
@@ -13,6 +13,10 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages   # ✅ 반드시 추가해야 함
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,4 +27,5 @@ jobs:
           path: .   # index.html, kiosk.css, kiosk.js가 있는 위치
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
