@@ -1,9 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy static site to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main   # main 브랜치에 push 할 때 자동 실행
 
 permissions:
   contents: read
@@ -14,9 +14,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: ./
-      - uses: actions/deploy-pages@v4
+          path: .   # index.html, kiosk.css, kiosk.js가 있는 위치
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
