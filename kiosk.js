@@ -57,7 +57,7 @@ function showModal(title, message, type, onConfirm = null) {
 
     if (type === 'alert') {
         const okButton = document.createElement('button');
-        okButton.textContent = '확인';
+        okButton.textContent = '✅️확인';
         okButton.className = 'modal-btn confirm';
         okButton.onclick = () => hideModal();
         modalButtons.appendChild(okButton);
@@ -227,3 +227,4 @@ document.addEventListener('DOMContentLoaded', () => {
     renderOrderSummary();
     orderButton.addEventListener('click', confirmOrder);
 });
+
