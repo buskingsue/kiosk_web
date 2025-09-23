@@ -63,7 +63,7 @@ function showModal(title, message, type, onConfirm = null) {
         modalButtons.appendChild(okButton);
     } else if (type === 'confirm') {
         const confirmButton = document.createElement('button');
-        confirmButton.textContent = '예';
+        confirmButton.textContent = '✅️예';
         confirmButton.className = 'modal-btn confirm';
         confirmButton.onclick = () => {
             hideModal();
@@ -227,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderOrderSummary();
     orderButton.addEventListener('click', confirmOrder);
 });
+
 
 
 
