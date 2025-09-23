@@ -72,7 +72,7 @@ function showModal(title, message, type, onConfirm = null) {
         modalButtons.appendChild(confirmButton);
 
         const cancelButton = document.createElement('button');
-        cancelButton.textContent = '아니오';
+        cancelButton.textContent = '❌아니오';
         cancelButton.className = 'modal-btn cancel';
         cancelButton.onclick = () => {
             hideModal();
@@ -227,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderOrderSummary();
     orderButton.addEventListener('click', confirmOrder);
 });
+
 
 
 
