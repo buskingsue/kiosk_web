@@ -14,7 +14,7 @@ const items = Array.from({ length: 10 }, (_, i) => {
         "kiwi juice"
     ];
     // 가격 배열
-    const prices = [6200, 5500, 5500, 3500, 5200, 6800, 6500, 4800, 4900, 5000];
+    const prices = [6200, 5400, 5500, 3500, 5200, 6800, 6500, 4800, 4900, 5000];
     // 이미지 경로를 001 ~ 010 형태로 포맷팅
     const img_url = `menu/${(i + 1).toString().padStart(3, '0')}.png`;
     // 가격 문자열로 포맷팅 (쉼표 포함)
