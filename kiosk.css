@@ -1,3 +1,4 @@
+/* 기본 스타일 */
 body {
     font-family: 'Noto Sans KR', 'Inter', sans-serif;
     background-color: #2F1B0C;
@@ -10,6 +11,7 @@ body {
     box-sizing: border-box;
 }
 
+/* 메인 컨테이너 */
 .container {
     display: flex;
     flex-direction: column;
@@ -18,70 +20,14 @@ body {
     gap: 20px;
 }
 
+/* 데스크탑 가로 배치 */
 @media (min-width: 1024px) {
     .container {
         flex-direction: row;
     }
 }
 
-/* 🔥 모바일 최적화 구간 추가 */
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-
-    .menu-section {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 1rem;
-    }
-
-    .menu-item {
-        padding: 0.75rem;
-    }
-
-    .menu-item img {
-        width: 100px;
-        height: 100px;
-    }
-
-    .item-name-kor {
-        font-size: 1rem;
-    }
-    .item-name-eng {
-        font-size: 0.8rem;
-    }
-    .item-price {
-        font-size: 0.9rem;
-    }
-
-    .order-section {
-        padding: 1rem;
-    }
-
-    .order-button {
-        padding: 0.8rem;
-        font-size: 1rem;
-    }
-
-    .modal-content {
-        padding: 1.5rem;
-        width: 95%;
-    }
-
-    .modal-title {
-        font-size: 1.5rem;
-    }
-
-    .modal-message {
-        font-size: 1rem;
-    }
-
-    .modal-btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-}
-
+/* 메뉴 / 주문 영역 */
 .menu-section, .order-section {
     background-color: #FAD6A5;
     border-radius: 1rem;
@@ -103,6 +49,7 @@ body {
     justify-content: space-between;
 }
 
+/* 메뉴 아이템 */
 .menu-item {
     background-color: white;
     border-radius: 0.75rem;
@@ -147,6 +94,7 @@ body {
     margin-bottom: 0.75rem;
 }
 
+/* 수량 조작 버튼 */
 .quantity-controls {
     display: flex;
     align-items: center;
@@ -184,6 +132,7 @@ body {
     text-align: center;
 }
 
+/* 주문 내역 */
 .order-summary {
     flex-grow: 1;
     overflow-y: auto;
@@ -212,6 +161,7 @@ body {
     margin-top: 0.2rem;
 }
 
+/* 총합 섹션 */
 .total-section {
     background-color: #FAD6A5;
     padding: 1rem;
@@ -226,6 +176,7 @@ body {
     text-align: center;
 }
 
+/* 주문 버튼 */
 .order-button {
     width: 100%;
     padding: 1rem;
@@ -250,6 +201,7 @@ body {
     transform: translateY(0);
 }
 
+/* 모달 */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -333,4 +285,80 @@ body {
 
 .modal-btn.cancel:hover {
     background-color: #C0C0C0;
+}
+
+/* ---------------------------------------
+    📱 모바일 최적화 (핵심)
+---------------------------------------- */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+        min-height: auto;
+    }
+
+    .container {
+        gap: 12px;
+    }
+
+    /* 메뉴 무조건 1열 */
+    .menu-section {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+
+    /* 메뉴 카드 크기 다운 */
+    .menu-item {
+        padding: 0.8rem;
+    }
+
+    .menu-item img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .item-name-kor {
+        font-size: 1rem;
+    }
+    .item-name-eng {
+        font-size: 0.85rem;
+    }
+    .item-price {
+        font-size: 0.95rem;
+    }
+
+    /* 주문 섹션 여백 감소 */
+    .order-section {
+        padding: 1rem;
+    }
+
+    .order-item-name {
+        font-size: 1rem;
+    }
+
+    .order-item-price {
+        font-size: 0.9rem;
+    }
+
+    /* 총합 텍스트 축소 */
+    .total-text {
+        font-size: 1.2rem;
+    }
+
+    /* 주문 버튼 터치 영역 확대 */
+    .order-button {
+        padding: 1.2rem;
+        font-size: 1.1rem;
+    }
+
+    /* 모달 최적화 */
+    .modal-content {
+        padding: 1.5rem;
+    }
+    .modal-title {
+        font-size: 1.5rem;
+    }
+    .modal-message {
+        font-size: 1rem;
+    }
 }
