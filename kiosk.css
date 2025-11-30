@@ -9,6 +9,7 @@ body {
     padding: 20px;
     box-sizing: border-box;
 }
+
 .container {
     display: flex;
     flex-direction: column;
@@ -16,29 +17,92 @@ body {
     max-width: 1280px;
     gap: 20px;
 }
+
 @media (min-width: 1024px) {
     .container {
         flex-direction: row;
     }
 }
+
+/* 🔥 모바일 최적화 구간 추가 */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .menu-section {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+    }
+
+    .menu-item {
+        padding: 0.75rem;
+    }
+
+    .menu-item img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .item-name-kor {
+        font-size: 1rem;
+    }
+    .item-name-eng {
+        font-size: 0.8rem;
+    }
+    .item-price {
+        font-size: 0.9rem;
+    }
+
+    .order-section {
+        padding: 1rem;
+    }
+
+    .order-button {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .modal-content {
+        padding: 1.5rem;
+        width: 95%;
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+    }
+
+    .modal-message {
+        font-size: 1rem;
+    }
+
+    .modal-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}
+
 .menu-section, .order-section {
     background-color: #FAD6A5;
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
 .menu-section {
     flex: 2;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1.5rem;
 }
+
 .order-section {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
+
 .menu-item {
     background-color: white;
     border-radius: 0.75rem;
@@ -50,9 +114,11 @@ body {
     text-align: center;
     transition: transform 0.2s ease-in-out;
 }
+
 .menu-item:hover {
     transform: translateY(-5px);
 }
+
 .menu-item img {
     width: 120px;
     height: 120px;
@@ -60,23 +126,27 @@ body {
     object-fit: cover;
     margin-bottom: 0.75rem;
 }
+
 .item-name-kor {
     font-size: 1.1rem;
     font-weight: bold;
     color: #6E260E;
     margin-bottom: 0.25rem;
 }
+
 .item-name-eng {
     font-size: 0.9rem;
     color: #D35400;
     margin-bottom: 0.5rem;
 }
+
 .item-price {
     font-size: 1rem;
     font-weight: bold;
     color: #2F1B0C;
     margin-bottom: 0.75rem;
 }
+
 .quantity-controls {
     display: flex;
     align-items: center;
@@ -85,6 +155,7 @@ body {
     border-radius: 0.5rem;
     padding: 0.25rem 0.5rem;
 }
+
 .quantity-btn {
     background-color: #F5CBA7;
     color: black;
@@ -95,13 +166,16 @@ body {
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
+
 .quantity-btn:hover:not(:disabled) {
     background-color: #E6B08E;
 }
+
 .quantity-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
 .quantity-display {
     font-size: 1rem;
     font-weight: bold;
@@ -109,41 +183,49 @@ body {
     min-width: 25px;
     text-align: center;
 }
+
 .order-summary {
     flex-grow: 1;
     overflow-y: auto;
     margin-bottom: 1rem;
 }
+
 .order-item {
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px dashed #D35400;
 }
+
 .order-item:last-child {
     border-bottom: none;
 }
+
 .order-item-name {
     font-size: 1.1rem;
     color: #6E260E;
     font-weight: bold;
 }
+
 .order-item-price {
     font-size: 1rem;
     color: #D35400;
     margin-top: 0.2rem;
 }
+
 .total-section {
     background-color: #FAD6A5;
     padding: 1rem;
     border-radius: 0.75rem;
     border-top: 2px solid #D35400;
 }
+
 .total-text {
     font-size: 1.5rem;
     font-weight: bold;
     color: #6E260E;
     text-align: center;
 }
+
 .order-button {
     width: 100%;
     padding: 1rem;
@@ -158,13 +240,16 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-top: 1rem;
 }
+
 .order-button:hover {
     background-color: #B84C00;
     transform: translateY(-2px);
 }
+
 .order-button:active {
     transform: translateY(0);
 }
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -180,10 +265,12 @@ body {
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
 .modal-overlay.show {
     opacity: 1;
     visibility: visible;
 }
+
 .modal-content {
     background-color: #FAD6A5;
     padding: 2rem;
@@ -195,26 +282,31 @@ body {
     transform: translateY(-50px);
     transition: transform 0.3s ease;
 }
+
 .modal-overlay.show .modal-content {
     transform: translateY(0);
 }
+
 .modal-title {
     font-size: 1.8rem;
     font-weight: bold;
     color: #6E260E;
     margin-bottom: 1.5rem;
 }
+
 .modal-message {
     font-size: 1.2rem;
     color: #2F1B0C;
     margin-bottom: 2rem;
     line-height: 1.5;
 }
+
 .modal-buttons {
     display: flex;
     justify-content: center;
     gap: 1rem;
 }
+
 .modal-btn {
     padding: 0.8rem 1.5rem;
     border: none;
@@ -224,17 +316,21 @@ body {
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
+
 .modal-btn.confirm {
     background-color: #D35400;
     color: white;
 }
+
 .modal-btn.confirm:hover {
     background-color: #B84C00;
 }
+
 .modal-btn.cancel {
     background-color: #E0E0E0;
     color: #333;
 }
+
 .modal-btn.cancel:hover {
     background-color: #C0C0C0;
 }
