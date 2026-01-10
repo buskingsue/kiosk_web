@@ -1,42 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>호랑이 키오스크 (Tiger Kiosk)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="kiosk.css">
+    <title>2026 호랑이 키오스크 (Tiger Kiosk)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div id="menu-items-container" class="menu-section">
-            <!-- Menu items will be dynamically loaded here -->
-        </div>
+    <div class="app-container">
+        <header class="main-header">
+            <h1 class="brand-title">🐯 2026 호랑이 키오스크</h1>
+            <p class="brand-subtitle">기운찬 호랑이 기운으로 맛있는 하루!</p>
+        </header>
 
-        <div class="order-section">
-            <div class="order-summary" id="order-summary-container">
-                <!-- Ordered items will be dynamically loaded here -->
-                <p class="text-center text-gray-600 text-lg mt-4" id="empty-cart-message">선택한 메뉴가 없습니다.</p>
-            </div>
-            <div class="total-section">
-                <p id="total-display" class="total-text">총 0개 주문 : 0원</p>
-                <button id="order-button" class="order-button">🐯 주문 완료 🐯</button>
-            </div>
+        <main class="content-wrapper">
+            <section class="menu-section">
+                <div id="menu-grid" class="menu-grid">
+                    </div>
+            </section>
+
+            <section class="cart-section">
+                <div class="cart-container">
+                    <h2 class="cart-title">🛒 내 장바구니</h2>
+                    
+                    <div id="cart-items" class="cart-items">
+                        <div id="empty-cart-msg" class="empty-cart">
+                            <span class="empty-icon">🍽️</span>
+                            <p>선택된 메뉴가 없습니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="cart-footer">
+                        <div class="total-row">
+                            <span>총 주문 금액</span>
+                            <span id="total-price" class="total-price-text">0원</span>
+                        </div>
+                        <button id="btn-order" class="btn-order">
+                            🐯 주문하기
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3 id="modal-title" class="modal-title">알림</h3>
+            <p id="modal-msg" class="modal-msg">메시지 내용</p>
+            <div id="modal-actions" class="modal-actions">
+                </div>
         </div>
     </div>
 
-    <!-- Custom Modal for Confirmations/Alerts -->
-    <div id="custom-modal-overlay" class="modal-overlay">
-        <div class="modal-content">
-            <h3 id="modal-title" class="modal-title"></h3>
-            <p id="modal-message" class="modal-message"></p>
-            <div id="modal-buttons" class="modal-buttons">
-                <!-- Buttons will be dynamically added here -->
-            </div>
-        </div>
-    </div>
-
-    <script src="kiosk.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
