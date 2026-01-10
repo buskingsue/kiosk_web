@@ -1,248 +1,188 @@
-// 메뉴 아이템 10개를 생성합니다
-const items = Array.from({ length: 10 }, (_, i) => {
-    // 한글 이름 배열
-    const korNames = [
-        "🥪크로와상 샌드위치", "🍗치킨 🥗샐러드", "🥪햄 샌드위치",
-        "아이스 ☕아메리카노", "🍫아이스 초코 블랜드", "🍓딸기 밀크티 라떼",
-        "🍓🍓딸기 스무디", "🍊오렌지 라임 에이드", "🍊자몽 에이드", "🥝키위 쥬스"
-    ];
-    // 영어 이름 배열
-    const engNames = [
-        "croissant sandwich", "chicken salad", "ham sandwich",
-        "iced americano", "iced choco blended", "strawberry milk tea latte",
-        "strawberry smoothie", "orange lime ade", "grapefruit ade",
-        "kiwi juice"
-    ];
-    // 가격 배열
-    const prices = [6200, 5400, 5500, 3500, 5200, 6800, 6500, 4800, 4900, 5000];
-    // 이미지 경로를 001 ~ 010 형태로 포맷팅
-    const img_url = `menu/${(i + 1).toString().padStart(3, '0')}.png`;
-    // 가격 문자열로 포맷팅 (쉼표 포함)
-    const price_str = prices[i].toLocaleString();
-    // 위치 계산 (열, 행, 좌표값)
-    const col = i % 3, row = Math.floor(i / 3);
-    const x = 40 + col * 230;
-    const y = 40 + row * 310;
-    const rect = [x, y, x + 190, y + 280];
-    // 객체 리턴
-    return {
-        kor: korNames[i],
-        eng: engNames[i],
-        price: prices[i],
-        price_str,
-        count: 0,
-        img_url,
-        rect
-    };
-});
+// =========================================
+// 1. 데이터 설정
+// =========================================
+const menuData = [
+    { id: 1, kor: "🥪 크로와상 샌드위치", eng: "Croissant Sandwich", price: 6200, imgKey: "sandwich" },
+    { id: 2, kor: "🍗 치킨 샐러드", eng: "Chicken Salad", price: 5400, imgKey: "salad" },
+    { id: 3, kor: "🥪 햄 샌드위치", eng: "Ham Sandwich", price: 5500, imgKey: "ham" },
+    { id: 4, kor: "☕ 아이스 아메리카노", eng: "Iced Americano", price: 3500, imgKey: "coffee" },
+    { id: 5, kor: "🍫 초코 블렌디드", eng: "Choco Blended", price: 5200, imgKey: "choco" },
+    { id: 6, kor: "🍓 딸기 라떼", eng: "Strawberry Latte", price: 6800, imgKey: "strawberry" },
+    { id: 7, kor: "🥤 딸기 스무디", eng: "Berry Smoothie", price: 6500, imgKey: "smoothie" },
+    { id: 8, kor: "🍊 라임 에이드", eng: "Lime Ade", price: 4800, imgKey: "lime" },
+    { id: 9, kor: "🍊 자몽 에이드", eng: "Grapefruit Ade", price: 4900, imgKey: "grapefruit" },
+    { id: 10, kor: "🥝 키위 주스", eng: "Kiwi Juice", price: 5000, imgKey: "kiwi" }
+];
 
-// DOM 요소 가져오기
-const menuItemsContainer = document.getElementById('menu-items-container');
-const orderSummaryContainer = document.getElementById('order-summary-container');
-const totalDisplay = document.getElementById('total-display');
-const orderButton = document.getElementById('order-button');
-const emptyCartMessage = document.getElementById('empty-cart-message');
+// 각 메뉴의 수량을 관리하는 상태 객체
+let cartState = menuData.map(item => ({ ...item, count: 0 }));
 
-// 커스텀 모달 관련 요소 가져오기
-const modalOverlay = document.getElementById('custom-modal-overlay');
+// =========================================
+// 2. DOM 요소 가져오기
+// =========================================
+const menuGrid = document.getElementById('menu-grid');
+const cartItemsContainer = document.getElementById('cart-items');
+const emptyCartMsg = document.getElementById('empty-cart-msg');
+const totalPriceEl = document.getElementById('total-price');
+const orderBtn = document.getElementById('btn-order');
+
+const modalOverlay = document.getElementById('modal-overlay');
 const modalTitle = document.getElementById('modal-title');
-const modalMessage = document.getElementById('modal-message');
-const modalButtons = document.getElementById('modal-buttons');
+const modalMsg = document.getElementById('modal-msg');
+const modalActions = document.getElementById('modal-actions');
 
-// 모달을 보여주는 함수
-function showModal(title, message, type, onConfirm = null) {
-    modalTitle.textContent = title; // 제목 설정
-    modalMessage.textContent = message; // 메시지 설정
-    modalButtons.innerHTML = ''; // 버튼 초기화
+// =========================================
+// 3. 주요 함수
+// =========================================
 
-    if (type === 'alert') {
-        const okButton = document.createElement('button');
-        okButton.textContent = '✅️확인';
-        okButton.className = 'modal-btn confirm';
-        okButton.onclick = () => hideModal();
-        modalButtons.appendChild(okButton);
-    } else if (type === 'confirm') {
-        const confirmButton = document.createElement('button');
-        confirmButton.textContent = '✅️예';
-        confirmButton.className = 'modal-btn confirm';
-        confirmButton.onclick = () => {
-            hideModal();
-            if (onConfirm) onConfirm(true);
-        };
-        modalButtons.appendChild(confirmButton);
+// 메뉴 리스트 렌더링 (초기 1회 실행)
+function initMenu() {
+    menuGrid.innerHTML = '';
+    cartState.forEach((item, index) => {
+        // 이미지 주소 생성 (placeholder 사용)
+        const imgSrc = `https://placehold.co/200x200/F97316/FFFFFF?text=${item.eng.split(' ')[0]}`;
 
-        const cancelButton = document.createElement('button');
-        cancelButton.textContent = '❌아니오';
-        cancelButton.className = 'modal-btn cancel';
-        cancelButton.onclick = () => {
-            hideModal();
-            if (onConfirm) onConfirm(false);
-        };
-        modalButtons.appendChild(cancelButton);
-    }
-
-    modalOverlay.classList.add('show'); // 모달 표시
-}
-
-// 모달 숨김
-function hideModal() {
-    modalOverlay.classList.remove('show');
-}
-
-// 메뉴 아이템을 화면에 렌더링
-function renderMenuItems() {
-    menuItemsContainer.innerHTML = ''; // 초기화
-
-    items.forEach((item, index) => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'menu-item';
-
-        // 이미지 생성 및 오류 처리
-        const img = document.createElement('img');
-        img.src = item.img_url;
-        img.alt = item.kor;
-        img.onerror = () => {
-            img.onerror = null;
-            img.src = 'https://placehold.co/150x150/CCCCCC/333333?text=Image+Not+Found';
-        };
-
-        // 이름, 가격, 수량 컨트롤 생성
-        itemDiv.appendChild(img);
-
-        itemDiv.innerHTML += `
-            <p class="item-name-kor">${item.kor}</p>
-            <p class="item-name-eng">${item.eng}</p>
-            <p class="item-price">${item.price.toLocaleString()}원</p>
-            <div class="quantity-controls">
-                <button class="quantity-btn" data-action="decrease" data-index="${index}" aria-label="수량 감소" ${item.count === 0 ? 'disabled' : ''}>-</button>
-                <span class="quantity-display" id="count-${index}">${item.count}</span>
-                <button class="quantity-btn" data-action="increase" data-index="${index}" aria-label="수량 증가">+</button>
+        const card = document.createElement('div');
+        card.className = 'menu-card';
+        card.innerHTML = `
+            <img src="${imgSrc}" alt="${item.kor}" class="menu-img">
+            <div class="menu-info">
+                <h3>${item.kor}</h3>
+                <p>${item.eng}</p>
+                <span class="menu-price">${item.price.toLocaleString()}원</span>
+            </div>
+            <div class="qty-control">
+                <button class="btn-qty" onclick="updateCount(${index}, -1)" ${item.count === 0 ? 'disabled' : ''} id="btn-minus-${index}">-</button>
+                <span class="qty-val" id="qty-${index}">${item.count}</span>
+                <button class="btn-qty" onclick="updateCount(${index}, 1)">+</button>
             </div>
         `;
-
-        menuItemsContainer.appendChild(itemDiv);
+        menuGrid.appendChild(card);
     });
 }
 
-// 주문 요약 렌더링
-function renderOrderSummary() {
-    orderSummaryContainer.innerHTML = '';
-    let totalCount = 0;
-    let totalPrice = 0;
-    let hasItemsInCart = false;
+// 수량 업데이트 함수
+window.updateCount = function(index, change) {
+    const item = cartState[index];
+    
+    // 수량 변경 (0 미만 방지)
+    if (item.count + change >= 0) {
+        item.count += change;
+    }
 
-    items.forEach(item => {
+    // DOM 업데이트 (전체 리렌더링 방지)
+    document.getElementById(`qty-${index}`).textContent = item.count;
+    document.getElementById(`btn-minus-${index}`).disabled = (item.count === 0);
+
+    // 장바구니 및 총액 업데이트
+    renderCart();
+}
+
+// 장바구니 렌더링
+function renderCart() {
+    cartItemsContainer.innerHTML = ''; // 초기화
+    let total = 0;
+    let hasItems = false;
+
+    cartState.forEach(item => {
         if (item.count > 0) {
-            hasItemsInCart = true;
-            const orderItemDiv = document.createElement('div');
-            orderItemDiv.className = 'order-item';
-            orderItemDiv.innerHTML = `
-                <p class="order-item-name">✔ ${item.kor} × ${item.count}개</p>
-                <p class="order-item-price">= ${(item.price * item.count).toLocaleString()}원</p>
+            hasItems = true;
+            const priceSum = item.price * item.count;
+            total += priceSum;
+
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item';
+            cartItem.innerHTML = `
+                <div>
+                    <div class="c-name">${item.kor}</div>
+                    <div class="c-detail">${item.price.toLocaleString()}원 × ${item.count}개</div>
+                </div>
+                <div class="c-total">${priceSum.toLocaleString()}원</div>
             `;
-            orderSummaryContainer.appendChild(orderItemDiv);
-            totalCount += item.count;
-            totalPrice += item.price * item.count;
+            cartItemsContainer.appendChild(cartItem);
         }
     });
 
-    if (!hasItemsInCart) {
-        emptyCartMessage.style.display = 'block';
-        orderSummaryContainer.appendChild(emptyCartMessage);
+    // 장바구니 비었을 때 처리
+    if (!hasItems) {
+        cartItemsContainer.appendChild(emptyCartMsg);
+        emptyCartMsg.style.display = 'block';
     } else {
-        emptyCartMessage.style.display = 'none';
+        emptyCartMsg.style.display = 'none'; // 이미 JS로 지워지긴 하지만 안전장치
     }
 
-    totalDisplay.textContent = `총 ${totalCount}개 주문 : ${totalPrice.toLocaleString()}원`;
+    totalPriceEl.textContent = `${total.toLocaleString()}원`;
 }
 
-// 수량 증가 함수
-function increaseCount(index) {
-    items[index].count++;
-    updateQuantityDisplay(index);
-    renderOrderSummary();
-}
+// =========================================
+// 4. 모달 관련 함수
+// =========================================
+function showModal(title, msg, type, callback) {
+    modalTitle.textContent = title;
+    modalMsg.innerHTML = msg.replace(/\n/g, '<br>');
+    modalActions.innerHTML = '';
 
-// 수량 감소 함수
-function decreaseCount(index) {
-    if (items[index].count > 0) {
-        items[index].count--;
-        updateQuantityDisplay(index);
-        renderOrderSummary();
+    const confirmBtn = document.createElement('button');
+    confirmBtn.className = 'btn-modal btn-confirm';
+    confirmBtn.textContent = '확인';
+    
+    if (type === 'confirm') {
+        confirmBtn.textContent = '예';
+        const cancelBtn = document.createElement('button');
+        cancelBtn.className = 'btn-modal btn-cancel';
+        cancelBtn.textContent = '아니오';
+        cancelBtn.onclick = closeModal;
+        modalActions.appendChild(cancelBtn);
     }
+
+    confirmBtn.onclick = () => {
+        closeModal();
+        if (callback) callback();
+    };
+    modalActions.appendChild(confirmBtn);
+
+    modalOverlay.classList.remove('hidden');
 }
 
-// 수량 표시 및 버튼 상태 업데이트
-function updateQuantityDisplay(index) {
-    const countSpan = document.getElementById(`count-${index}`);
-    if (countSpan) {
-        const count = items[index].count;
-        countSpan.textContent = count;
-
-        const minusButton = countSpan.previousElementSibling;
-        if (minusButton?.dataset.action === 'decrease') {
-            minusButton.disabled = count === 0;
-        }
-
-        const plusButton = countSpan.nextElementSibling;
-        if (plusButton?.dataset.action === 'increase') {
-            plusButton.disabled = false; // 필요시 최대 수량 제한 가능
-        }
-    }
+function closeModal() {
+    modalOverlay.classList.add('hidden');
 }
 
-// 주문 확인 함수
-function confirmOrder() {
-    const totalCount = items.reduce((sum, item) => sum + item.count, 0);
-    const totalPrice = items.reduce((sum, item) => sum + item.price * item.count, 0);
+// =========================================
+// 5. 주문 로직
+// =========================================
+orderBtn.addEventListener('click', () => {
+    const totalCount = cartState.reduce((sum, item) => sum + item.count, 0);
+    const totalPrice = cartState.reduce((sum, item) => sum + (item.price * item.count), 0);
 
     if (totalCount === 0) {
-        showModal("호랑이 알림", "선택한 메뉴가 없습니다!", 'alert');
+        showModal('알림 🐯', '장바구니가 비어있습니다.<br>메뉴를 선택해주세요.', 'alert');
         return;
     }
 
-    showModal("주문 확인 🐯", `총 ${totalCount}개, ${totalPrice.toLocaleString()}원 주문하시겠습니까?`, 'confirm', (result) => {
-        if (result) {
-            items.forEach(item => item.count = 0); // 주문 후 수량 초기화
-            renderMenuItems();
-            renderOrderSummary();
-            showModal("주문 완료", "호랑이처럼 빠르게 주문이 완료되었습니다!\n감사합니다 🐯", 'alert');
+    showModal(
+        '주문 확인', 
+        `총 ${totalCount}개 메뉴<br><b style="color:#F97316">${totalPrice.toLocaleString()}원</b> 결제하시겠습니까?`, 
+        'confirm', 
+        () => {
+            // 주문 완료 처리
+            showModal('주문 완료', '주문이 성공적으로 접수되었습니다!<br>호랑이 기운 받아가세요 🐯', 'alert', () => {
+                // 초기화
+                cartState.forEach((item, idx) => {
+                    item.count = 0;
+                    document.getElementById(`qty-${idx}`).textContent = 0;
+                    document.getElementById(`btn-minus-${idx}`).disabled = true;
+                });
+                renderCart();
+            });
         }
-    });
-}
-
-// 이벤트 위임 방식으로 버튼 클릭 처리
-menuItemsContainer.addEventListener('click', (event) => {
-    if (event.target.classList.contains('quantity-btn')) {
-        const index = parseInt(event.target.dataset.index);
-        const action = event.target.dataset.action;
-        if (action === 'increase') increaseCount(index);
-        else if (action === 'decrease') decreaseCount(index);
-    }
+    );
 });
 
-// 페이지 로딩 완료 시 초기 렌더링
+// =========================================
+// 6. 실행
+// =========================================
 document.addEventListener('DOMContentLoaded', () => {
-    renderMenuItems();
-    renderOrderSummary();
-    orderButton.addEventListener('click', confirmOrder);
+    initMenu();
+    renderCart(); // 초기 상태 렌더링
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
