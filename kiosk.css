@@ -158,11 +158,11 @@ body {
 .quantity-controls {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center; /* 가운데 정렬 추가 */
+    gap: 0.4rem;             /* 간격을 살짝 좁혀서 균형감 맞추기 */
     background-color: white;
     border-radius: 0.5rem;
-    padding: 0.25rem;
-    margin-left: 10px;
+    padding: 0.25rem 0.4rem; /* 좌우 패딩을 주어 안정감 부여 */
 }
 
 .quantity-btn {
@@ -170,14 +170,15 @@ body {
     color: black;
     border: none;
     border-radius: 0.375rem;
-    width: 30px;
-    height: 30px;
-    font-size: 1.1rem;
+    width: 28px;             /* 크기를 살짝 컴팩트하게 조정하면 정렬이 더 깔끔해집니다 */
+    height: 28px;
+    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;          /* 버튼 크기가 찌그러지지 않도록 고정 */
 }
 
 .quantity-btn:hover {
