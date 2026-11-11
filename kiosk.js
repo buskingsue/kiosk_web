@@ -1,20 +1,20 @@
 // 메뉴 아이템 10개를 생성합니다
-const items = Array.from({ length: 10 }, (_, i) => {
+const items = Array.from({ length: 12 }, (_, i) => {
     // 한글 이름 배열
     const korNames = [
         "🥪크로와상 샌드위치", "🍗치킨 🥗샐러드", "🥪햄 샌드위치",
         "아이스 ☕아메리카노", "🍫아이스 초코 블랜드", "🍓딸기 밀크티 라떼",
-        "🍓🍓딸기 스무디", "🍊오렌지 라임 에이드", "🍊자몽 에이드", "🥝키위 쥬스"
+        "🍓🍓딸기 스무디", "🍊오렌지 라임 에이드", "🍊자몽 에이드", "🥝키위 쥬스", "초코 아이스크림", "베이글"
     ];
     // 영어 이름 배열
     const engNames = [
         "croissant sandwich", "chicken salad", "ham sandwich",
         "iced americano", "iced choco blended", "strawberry milk tea latte",
         "strawberry smoothie", "orange lime ade", "grapefruit ade",
-        "kiwi juice"
+        "kiwi juice", "choco icecream", "bagle"
     ];
     // 가격 배열
-    const prices = [6200, 5400, 5500, 3500, 5200, 6800, 6500, 4800, 4900, 5000];
+    const prices = [6200, 5400, 5500, 3500, 5200, 6800, 6500, 4800, 4900, 5000, 3400, 2500];
     // 이미지 경로를 001 ~ 010 형태로 포맷팅
     const img_url = `menu/${(i + 1).toString().padStart(3, '0')}.png`;
     // 가격 문자열로 포맷팅 (쉼표 포함)
